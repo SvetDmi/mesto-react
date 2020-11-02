@@ -1,15 +1,17 @@
 import React from 'react';
 
-function Card({src, alt, title, onCardClick}) {
+function Card({ src, alt, title, onCardClick }) {
     function handleClick() {
-        onCardClick({src, alt, title});
-      }  
-  
+        onCardClick({ src, alt, title });
+    }
+
+
+
     return (
-        
-        <li className="elements__item" onClick = {handleClick} >
-            <button type="button" className="button elements__trash"></button>
-            <img src={src} alt={alt} className="elements__img"/>
+
+        <li className="elements__item" >
+            <button type="button" className="button elements__trash"> </button>
+            <img src={src} alt={alt} className="elements__img" onClick={handleClick} />
             <div className="elements__label">
                 <h2 className="elements__title">{title}</h2>
                 <div className="elements__likes">
@@ -18,7 +20,6 @@ function Card({src, alt, title, onCardClick}) {
                 </div>
             </div>
         </li>
-    
 
     );
 }
