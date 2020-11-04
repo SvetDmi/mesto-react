@@ -55,39 +55,25 @@ function App() {
     }
 
 
-    // ПРОФИЛЬ
+    // ДАННЫЕ
 
     const [userInfo, setUserInfo] = React.useState({});
 
-    React.useEffect(() => {
-        api.getUserInfo()
-            .then((userData) => {
-                setUserInfo(userData)
-            })
-            .catch(err => {
-                console.log(err)
-            });
-    }, [])
-
-    // Карточки
-
     const [initialCards, setInitialCards] = React.useState([]);
-
 
     React.useEffect(() => {
         api.getAllInfo()
             .then(res => {
                 const cardsData = res[0];
-                // const userData = res[1]
+                const userData = res[1]
 
                 setInitialCards(cardsData.map(item => ({
                     id: item._id,
                     src: item.link,
                     alt: item.name,
                     title: item.name,
-                })
-                )
-                )
+                })))
+                setUserInfo(userData)
             })
             .catch(err => {
                 console.log(err)
