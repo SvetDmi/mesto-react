@@ -1,21 +1,46 @@
 import React from 'react';
+import { CurrentUserContext } from './CurrentUserContext';
 
-function Card({ src, alt, title, onCardClick }) {
+
+function Card({ card, onCardClick, onCardLike, onCardDelete }) {
+
     function handleClick() {
-        onCardClick({ src, alt, title });
+        onCardClick(card);
     }
 
+    function handleLikeClick() {
+        onCardLike(card);
+    }
+
+    function handleDelete() {
+        onCardDelete(card)
+    }
+
+    const currentUser = React.useContext(CurrentUserContext);
+
+
+    // Показ иконки удаления
+    const isOwn = card.owner._id === currentUser._id;
+    const cardDeleteButtonClassName = (
+        `button elements__trash ${isOwn ? 'elements__trash_active' : ''}`
+    );
+
+    // Показ лайка
+    const isLiked = card.likes.some(like => like._id === currentUser._id);
+    const cardLikeButtonClassName = (
+        `button elements__like ${isLiked ? 'elements__like_active' : ''}`
+    );
 
 
     return (
 
         <li className="elements__item" >
-            <button type="button" className="button elements__trash"> </button>
-            <img src={src} alt={alt} className="elements__img" onClick={handleClick} />
+            <button type="button" className={cardDeleteButtonClassName} onClick={handleDelete} > </button>
+            <img src={card.link} alt={card.name} className="elements__img" onClick={handleClick} />
             <div className="elements__label">
-                <h2 className="elements__title">{title}</h2>
+                <h2 className="elements__title">{card.name}</h2>
                 <div className="elements__likes">
-                    <button type="button" className="button elements__like"></button>
+                    <button type="button" className={cardLikeButtonClassName} onClick={handleLikeClick}></button>
                     <div className="elements__like-count">0</div>
                 </div>
             </div>
@@ -23,5 +48,6 @@ function Card({ src, alt, title, onCardClick }) {
 
     );
 }
+
 
 export default Card;

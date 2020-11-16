@@ -35,9 +35,9 @@ class Api {
     };
 
 
-    getAllInfo() {
-        return Promise.all([this.getInitialCards(), this.getUserInfo()])
-    }
+    //     getAllInfo() {
+    //         return Promise.all([this.getInitialCards(), this.getUserInfo()])
+    //     }
 
     // 3. Редактирование профиля
     editUserInfo(inputData) {
@@ -69,29 +69,22 @@ class Api {
     // 7. Удаление карточки
     deleteCard(_id) {
         return fetch(`${this._url}/cards/${_id}`, {
-            method: "DELETE",
+            method: 'DELETE',
             headers: this._headers
         })
             .then(this._parsAnswer)
     }
+
 
     // 8. Постановка и снятие лайка
-    doLike(_id) {
+    changeLikeCardStatus(_id, isLiked) {
         return fetch(`${this._url}/cards/likes/${_id}`, {
-            method: "PUT",
+            method: `${isLiked ? 'PUT' : 'DELETE'}`,
             headers: this._headers
         })
             .then(this._parsAnswer)
     }
 
-    deleteLike(_id) {
-        return fetch(`${this._url}/cards/likes/${_id}`, {
-            method: "DELETE",
-            headers: this._headers
-        })
-            .then(this._parsAnswer);
-
-    }
 
     // 9. Обновление аватара пользователя  
     editAvatar(inputData) {
@@ -99,7 +92,7 @@ class Api {
             method: 'PATCH',
             headers: this._headers,
             body: JSON.stringify({
-                avatar: inputData.link
+                avatar: inputData.avatar
             })
         })
             .then(this._parsAnswer)
