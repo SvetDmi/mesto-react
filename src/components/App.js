@@ -9,7 +9,7 @@ import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
 import { api } from '../utils/Api.js';
-import { CurrentUserContext } from './CurrentUserContext';
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 
 function App() {
@@ -18,8 +18,10 @@ function App() {
     // Стейты
     const [currentUser, setCurrentUser] = React.useState({});
     const [cards, setCards] = React.useState([]);
-
+    // я все хуки из попапов собрала в App, вынеся их за пределы компонентов, но в этом попапе забыла удалить дублирующй код, прошу прощения за невнимательность
+    // Честно говоря, уже не помню почему, решила, что собирать хуки в Аpp правильно, если лучше, чтобы хуки в самих попапах, верну все обратно
     const [name, setName] = React.useState('');
+
     const [description, setDescription] = React.useState('');
 
     const [title, setTitle] = React.useState('');
@@ -31,31 +33,37 @@ function App() {
     // const [isUpdatePopupOpen, setUpdatePopupOpen] = React.useState(false);
     const [isSelectedCardOpen, setIsSelestedCardOpen] = React.useState(false);
     const [selectedCardData, setSelectedCardData] = React.useState({});
-    const [isLoading, setLoading] = React.useState();
+    const [isLoading, setLoading] = React.useState(false);
 
-    // ПРОФИЛЬ
+    // Загрузка данных
+
     React.useEffect(() => {
-        api.getUserInfo()
-            .then((userInfo) => {
-                setCurrentUser(userInfo)
+        api.getAllInfo()
+            .then(res => {
+                const cardsData = res[0];
+                const userData = res[1];
+                setCurrentUser(userData)
+                setCards(cardsData)
             })
             .catch((err) => {
                 console.log(err)
             });
     }, []);
 
+    // Профиль
 
     function handleUpdateUser(userInfo) {
         setLoading(true)
         api.editUserInfo(userInfo)
             .then((newUserInfo) => {
                 setCurrentUser(newUserInfo)
+                closeAllPopups();
             })
             .catch((err) => {
                 console.log(err)
             })
             .finally(() => {
-                closeAllPopups();
+
                 setLoading(false)
             })
     }
@@ -65,12 +73,13 @@ function App() {
         api.editAvatar(avatar)
             .then((newAvatar) => {
                 setCurrentUser(newAvatar)
+                closeAllPopups();
             })
             .catch((err) => {
                 console.log(err)
             })
             .finally(() => {
-                closeAllPopups();
+
                 setLoading(false)
             })
     }
@@ -89,31 +98,21 @@ function App() {
     }
 
 
-
-
     // КАРТОЧКИ
-    React.useEffect(() => {
-        api.getInitialCards()
-            .then((cardsData) => {
-                setCards(cardsData)
-            })
 
-            .catch(err => {
-                console.log(err)
-            });
-    }, [])
 
     function handleAddPlaceSubmit(cardsData) {
         setLoading(true)
         api.addCard(cardsData)
             .then((newCard) => {
                 setCards([newCard, ...cards])
+                closeAllPopups()
             })
             .catch((err) => {
                 console.log(err)
+
             })
             .finally(() => {
-                closeAllPopups();
                 setLoading(false)
             })
     }
@@ -199,6 +198,7 @@ function App() {
         setIsEditProfilePopupOpen(false);
         setIsAddPlacePopupOpen(false);
         setIsSelestedCardOpen(false);
+        setSelectedCardData({})
     }
 
 

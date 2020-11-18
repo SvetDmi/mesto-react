@@ -8,7 +8,7 @@ class Api {
         if (res.ok) {
             return res.json();
         }
-        return Promise.reject(`Ошибка: ${res.status}`);
+        return Promise.reject(new Error(`Ошибка: ${res.status}`));
     }
 
 
@@ -35,9 +35,9 @@ class Api {
     };
 
 
-    //     getAllInfo() {
-    //         return Promise.all([this.getInitialCards(), this.getUserInfo()])
-    //     }
+    getAllInfo() {
+        return Promise.all([this.getInitialCards(), this.getUserInfo()])
+    }
 
     // 3. Редактирование профиля
     editUserInfo(inputData) {

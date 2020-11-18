@@ -1,5 +1,5 @@
 import React from 'react';
-// import { CurrentUserContext } from './CurrentUserContext';
+// import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import PopupWithForm from './PopupWithForm';
 
 function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar, isLoading }) {
@@ -12,7 +12,6 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar, isLoading }) {
             avatar: avatar.current.value,
         });
         e.target.reset();
-
     }
 
     return (

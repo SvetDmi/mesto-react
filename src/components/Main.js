@@ -1,9 +1,7 @@
 import React from 'react';
 import Card from './Card';
 
-
-// import PopupWithForm from './PopupWithForm';
-import { CurrentUserContext } from './CurrentUserContext';
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 function Main({
     onEditProfile,
